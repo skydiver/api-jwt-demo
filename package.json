@@ -1,0 +1,24 @@
+{
+  "name": "api-jwt-demo",
+  "version": "1.0.0",
+  "description": "Express API using JWT",
+  "author": "Martín M.",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js --exec babel-node -e js"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.3",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^4.11.10",
+    "nodemon": "^1.12.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
