@@ -1,23 +1,50 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import jsonwebtoken from 'jsonwebtoken';
 import bodyParser from 'body-parser';
-import routes from './routes/login';
+
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+
+// mongoose connection
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.DB_CONNECTION, {
+  useCreateIndex: true,
+  useNewUrlParser: true
+});
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-routes(app);
+// JWT setup
+app.use((req, res, next) => {
+  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET, (err, decode) => {
+      if (err) {
+        req.user = null;
+      }
+      req.user = decode;
+      next();
+    });
+  } else {
+    req.user = null;
+    next();
+  }
+});
+
+// define routes
+app.use('/auth', require('./routes/auth'));
+app.use('/sample', require('./routes/sample'));
 
 // serving static files
 app.use(express.static('public'));
 
 app.get('/', (req, res) =>
-  res.send(`Node and express server is running on port ${PORT}`)
+  res.send(`Node and express server is running on port ${process.env.PORT}`)
 );
 
-app.listen(PORT, () =>
-  console.log(`your server is running on port ${PORT}`)
+app.listen(process.env.PORT, () =>
+  console.log(`your server is running on port ${process.env.PORT}`)
 );
