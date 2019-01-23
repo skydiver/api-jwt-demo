@@ -1,9 +1,9 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+const bcrypt = require('bcrypt');
+const jsonwebtoken = require('jsonwebtoken');
 
-import { User } from '../models/User';
+const { User } = require('../models/User');
 
-export const register = async (req, res) => {
+const register = async (req, res) => {
   const newUser = new User(req.body);
   newUser.password = bcrypt.hashSync(req.body.password, 10);
   try {
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
@@ -35,9 +35,9 @@ export const login = async (req, res) => {
     }
 
     return res.json({
-      token: jwt.sign({
-        email: user.email,
-        _id: user.id
+      token: jsonwebtoken.sign({
+        _id: user.id,
+        email: user.email
       }, process.env.JWT_SECRET)
     });
   } catch (err) {
@@ -48,7 +48,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const loginRequired = (req, res, next) => {
+const loginRequired = (req, res, next) => {
   if (req.user) {
     next();
   } else {
@@ -57,3 +57,5 @@ export const loginRequired = (req, res, next) => {
     });
   }
 };
+
+module.exports = { register, login, loginRequired };

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-import { loginRequired } from '../contollers/usersController';
-import { sample } from '../contollers/sampleController';
+const { loginRequired } = require('../contollers/usersController');
+const { sample } = require('../contollers/sampleController');
 
 router.get('/', loginRequired, sample);
 

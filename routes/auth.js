@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-import { login, register } from '../contollers/usersController';
+const { login, register } = require('../contollers/usersController');
 
 router.post('/register', register);
 router.post('/login', login);
