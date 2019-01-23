@@ -1,10 +1,10 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
-import JWT from './lib/jwt';
+const JWT = require('./lib/jwt');
 
 const app = express();
 
