@@ -1,9 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import jsonwebtoken from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 
 require('dotenv').config();
+
+import JWT from './lib/jwt';
 
 const app = express();
 
@@ -18,21 +19,8 @@ mongoose.connect(process.env.DB_CONNECTION, {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// JWT setup
-app.use((req, res, next) => {
-  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET, (err, decode) => {
-      if (err) {
-        req.user = null;
-      }
-      req.user = decode;
-      next();
-    });
-  } else {
-    req.user = null;
-    next();
-  }
-});
+// JWT middleware
+app.use(JWT);
 
 // define routes
 app.use('/auth', require('./routes/auth'));
