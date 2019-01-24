@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // JWT middleware
-app.use(JWT);
+app.use(JWT.verify);
 
 // define routes
 app.use('/auth', require('./routes/auth'));
